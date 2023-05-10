@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('articles', function (Blueprint $table) {
-            $table->id();
-            $table->string('title')->unique();
-            $table->text('description');
-            $table->unsignedFloat('price');
-            $table->string('status');
-            $table->timestamps();
+        Schema::table('payment_details', function (Blueprint $table) {
+            $table->foreignId('order_details_id')->constrained();
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('articles');
+        Schema::table('payment_details', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('order_details_id');
+        });
     }
 };

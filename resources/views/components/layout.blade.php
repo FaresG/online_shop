@@ -15,7 +15,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-{{--    <x-header></x-header>--}}
+    <x-header></x-header>
     @if(session()->has('success'))
         <x-flash type="success">
             {{ session()->get('success') }}

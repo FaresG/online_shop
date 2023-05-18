@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('sku');
             $table->decimal('price');
+            $table->string('stripe_id');
             $table->timestamps();
             $table->softDeletes();
         });

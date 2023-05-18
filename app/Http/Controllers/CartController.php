@@ -2,51 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
+use App\Events\CartUpdated;
 use App\Models\Cart;
 use App\Models\CartItem;
-use App\Repositories\CartRepository;
+use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CartController extends Controller
 {
-    public function __construct(
-        protected CartRepository $repository
-    )
+
+    public function index(Request $request): View
     {
+        $cart = Cart::ofCurrentUser($request->user())->with('cartItems', 'cartItems.product')->first();
+
+        return view('pages.cart.index', compact('cart'));
     }
 
-    public function index(Request $request)
+    public function add(Request $request, Product $product): RedirectResponse
     {
-        $cart = Cart::firstOrCreate([
-            'user_id' => $request->user()->id,
-            'status' => 'new'
-        ])->with(['cartItems', 'cartItems.article'])->first();
+        $cart = Cart::firstOrCreate(
+            ['user_id' => $request->user()->id],
+            ['user_id' => $request->user()->id, 'total' => 0]);
 
-        return view('pages.cart.index', [
-            'cart' => $cart,
-            'cartAmount' => $this->repository->amount()
+        // Create a cart item
+        $cartItem = CartItem::updateOrCreate(
+            ['cart_id' => $cart->id, 'product_id' => $product->id],
+            ['quantity' => $request->get('quantity') ?? 1]
+        );
+
+        $cart->cartItems()->save($cartItem);
+
+        CartUpdated::dispatch($cart);
+
+        return back()->with([
+            'success' => $product->name .' has been added to the cart'
         ]);
-    }
-
-    public function add(Request $request, Article $article)
-    {
-        $cart = Cart::where('user_id', $request->user()->id)->firstOrFail();
-
-        $cartItemQueryBuilder = CartItem::where('cart_id', $cart->id)->where('article_id', $article->id);
-        if ($cartItemQueryBuilder->exists())
-        {
-            $cartItem = $cartItemQueryBuilder->firstOrFail();
-            $cartItem->quantity++;
-        }
-        else {
-            $cartItem = new CartItem;
-            $cartItem->cart_id = $cart->id;
-            $cartItem->article_id = $article->id;
-            $cartItem->quantity = 1;
-        }
-        $cartItem->save();
-
-        return back()->with('success', 'Item added to your cart');
     }
 }

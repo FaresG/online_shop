@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('user_payments', function (Blueprint $table) {
             $table->id();
-            $table->string('payment_type');
+            $table->string('payment_type')->nullable();
             $table->string('provider');
-            $table->integer('account_number');
-            $table->date('expiry');
+            $table->string('account_number');
+            $table->date('expiry')->nullable();
             $table->timestamps();
         });
     }

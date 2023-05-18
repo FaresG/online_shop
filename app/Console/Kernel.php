@@ -20,8 +20,10 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
+        // Command Classes
         $this->load(__DIR__.'/Commands');
 
+        // Closure Commands
         require base_path('routes/console.php');
     }
 }

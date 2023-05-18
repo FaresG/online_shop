@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\CartUpdated;
+use App\Events\PaymentCompleted;
+use App\Listeners\SendPaymentConfirmationEmail;
+use App\Listeners\UpdateCartAmount;
+use App\Listeners\UpdateOrderInformation;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +23,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        CartUpdated::class => [
+            UpdateCartAmount::class
+        ],
+        PaymentCompleted::class => [
+            UpdateOrderInformation::class
+        ]
     ];
 
     /**

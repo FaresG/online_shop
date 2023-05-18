@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedInteger('amount');
             $table->string('provider');
             $table->string('status');
+            $table->json('payload');
             $table->timestamps();
         });
     }

@@ -13,7 +13,13 @@ class CartComposer
      */
     public function compose(View $view): void
     {
-        if (auth()->check())
-        $view->with('cartCount', Cart::where('user_id', auth()->user()->id)->firstOrFail()->cartItems->count());
+        if (auth()->check()) {
+            $currentUser = auth()->user();
+            $cart = Cart::firstOrCreate(
+                ['user_id' => $currentUser->id],
+                ['user_id' => $currentUser->id, 'total' => 0]);
+            $view->with('cartCount', $cart->cartItems->count());
+        }
+
     }
 }

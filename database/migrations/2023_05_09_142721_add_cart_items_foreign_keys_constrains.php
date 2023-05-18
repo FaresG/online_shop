@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('user_payments', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained();
+        Schema::table('cart_items', function (Blueprint $table) {
+            $table->foreignId('cart_id')->constrained();
+            $table->foreignId('product_id')->constrained();
         });
     }
 
@@ -21,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('user_payments', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('user_id');
+        Schema::table('cart_items', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('cart_id');
+            $table->dropConstrainedForeignId('product_id');
         });
     }
 };

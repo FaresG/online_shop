@@ -3,8 +3,11 @@
         <div class="py-1 mr-1 hover:bg-slate-300 hover:cursor-pointer @if (Route::is('home')) bg-slate-300 @endif">
             <a class="px-3" href="{{ route('home') }}">Home</a>
         </div>
-        <div class="py-1 mr-1 hover:bg-slate-300 hover:cursor-pointer @if (Route::is('articles.index')) bg-slate-300 @endif">
+        <div class="py-1 mr-1 hover:bg-slate-300 hover:cursor-pointer @if (Route::is('products.index')) bg-slate-300 @endif">
             <a class="px-3"  href="{{ route('products.index') }}">Products</a>
+        </div>
+        <div class="py-1 mr-1 hover:bg-slate-300 hover:cursor-pointer @if (Route::is('orders.index')) bg-slate-300 @endif">
+            <a class="px-3"  href="{{ route('orders.index') }}">My Orders</a>
         </div>
     </div>
     <div class="right-side flex">
